@@ -380,7 +380,7 @@ class ImageUploadTests(TestCase):
     """Tests for the image upload API."""
 
     def setUp(self):
-        self.client = APIClient
+        self.client = APIClient()
         self.user = get_user_model().objects.create_user(
             'user@example.com',
             'password123'
@@ -404,7 +404,7 @@ class ImageUploadTests(TestCase):
         self.recipe.refresh_from_db()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn('image', res.data)
-        self.assertTrue(os.path.exsists(self.recipe.image.path))
+        self.assertTrue(os.path.exists(self.recipe.image.path))
 
     def test_upload_image_bad_request(self):
         """Test uploading invalid image."""
