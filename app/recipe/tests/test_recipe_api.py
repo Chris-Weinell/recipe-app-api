@@ -389,7 +389,7 @@ class ImageUploadTests(TestCase):
         self.recipe = create_recipe(user=self.user)
 
     def tearDown(self):
-        self.recipe.image.delete()
+        self.recipe.images.delete()
 
     def test_upload_image(self):
         """Test Uploading an image to a recipe."""
@@ -398,13 +398,13 @@ class ImageUploadTests(TestCase):
             img = Image.new('RGB', (10, 10))
             img.save(image_file, format='JPEG')
             image_file.seek(0)
-            payload = {'image': image_file}
+            payload = {'images': image_file}
             res = self.client.post(url, payload, format='multipart')
 
         self.recipe.refresh_from_db()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertIn('image', res.data)
-        self.assertTrue(os.path.exists(self.recipe.image.path))
+        self.assertIn('images', res.data)
+        self.assertTrue(os.path.exists(self.recipe.images.path))
 
     def test_upload_image_bad_request(self):
         """Test uploading invalid image."""
